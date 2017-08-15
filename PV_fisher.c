@@ -43,6 +43,7 @@
 //  -  Flat LCDM cosmology (but not necessarily GR as gammaval can be changed).
 //  -  The damping of the velocity and density fields due to non-linear RSD is redshift independent
 
+// The parameters necessary for the calculation
 static int nparams = 4;           // The number of free parameters (we can use any of beta, fsigma8, r_g, sigma_g, sigma_u)
 static int Data[4] = {0,1,3,4};   // A vector of flags for the parameters we are interested in (0=beta, 1=fsigma8, 2=r_g, 3=sigma_g, 4=sigma_u). MAKE SURE THE LENGTH OF THIS VECTOR, NPARAMS AND THE ENTRIES AGREE/MAKE SENSE, OR YOU MIGHT GET NONSENSE RESULTS!!
 static int nziter = 10;           // Now many bins in redshift between zmin and zmax we are considering
@@ -62,13 +63,16 @@ static double error_rand = 300.0;    // The observational error due to random no
 static double error_dist = 0.05;     // The percentage error on the distance indicator (Typically 0.05 - 0.10 for Sne IA, 0.2 or more for Tully-Fisher or Fundamental Plane) 
 static double verbosity = 0;         // How much output to give: 0 = only percentage errors on fsigma8, 1 = other useful info and nuisance parameters, 2 = full fisher and covariance matrices
 
-// The number of redshifts and the redshifts themselves of the input matter and velocity divergence power spectra. These numbers are multiplied by 100, converted to ints and written in the form _z0p%02d which is then appended to the filename Pvel_file. See routine read_power. 
+// The number of redshifts and the redshifts themselves of the input matter and velocity divergence power spectra. 
+// These numbers are multiplied by 100, converted to ints and written in the form _z0p%02d which is then appended to the filename Pvel_file. See routine read_power. 
 static double nzin = 11;
 static double zin[11] = {0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50};
+char * Pvel_file = "./example_files/example_pk";                                                  // The file containing the velocity divergence power spectrum. Don't include .dat as we'll append the redshifts on read in
 
-char * Pvel_file = "/Volumes/Work/ICRAR/codes/copter-0.8.5/examples/rpt2_example_Howlett2016";                                                  // The file containing the velocity divergence power spectrum. Don't include .dat as we'll append the redshifts on read in
-char * nbar_file[300] = {"/Volumes/Work/ICRAR/TAIPAN/Mocks/Lightcone_SN-Optical_Lagos12Mill1_simulator_field1_1_nbar_vel_Jlt19p0_new.dat",      // The files containing the number density of the surveys. First is the PV survey, then the redshift survey. These files MUST have the same binning and redshift range, 
-                         "/Volumes/Work/ICRAR/TAIPAN/Mocks/Lightcone_SN-Optical_Lagos12Mill1_simulator_field1_1_nbar_Jlt19p0_new.dat"};         // so that the sum over redshift bins works (would be fine if we used splines), i.e., if one survey is shallower then that file must contain rows with n(z)=0
+// The files containing the number density of the surveys. First is the PV survey, then the redshift survey. These files MUST have the same binning and redshift range, 
+// so that the sum over redshift bins works (would be fine if we used splines), i.e., if one survey is shallower then that file must contain rows with n(z)=0.
+char * nbar_file[300] = {"./example_files/example_nbar_vel.dat",
+                         "./example_files/example_nbar_red.dat"};      
 
 // Other global parameters and arrays
 int NK, * NRED;
@@ -908,7 +912,6 @@ void read_power() {
         if (i == 0) {
             karray = (double *)calloc(NK, sizeof(double));
             deltakarray = (double *)calloc(NK-1, sizeof(double));
-            pmmnorm = (double *)calloc(NK, sizeof(double));
         }
         pmmarray[i] = (double *)calloc(NK, sizeof(double));
         pmtarray[i] = (double *)calloc(NK, sizeof(double));
