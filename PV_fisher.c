@@ -47,20 +47,21 @@
 static int nparams = 4;           // The number of free parameters (we can use any of beta, fsigma8, r_g, sigma_g, sigma_u)
 static int Data[4] = {0,1,3,4};   // A vector of flags for the parameters we are interested in (0=beta, 1=fsigma8, 2=r_g, 3=sigma_g, 4=sigma_u). MAKE SURE THE LENGTH OF THIS VECTOR, NPARAMS AND THE ENTRIES AGREE/MAKE SENSE, OR YOU MIGHT GET NONSENSE RESULTS!!
 static int nziter = 10;           // Now many bins in redshift between zmin and zmax we are considering
-static double zmin = 0.0;         // The minimum redshift to consider
-static double zmax = 0.5;         // The maximum redshift to consider
+static double zmin = 0.0;         // The minimum redshift to consider (You must have power spectra that are within this range or GSL spline will error out)
+static double zmax = 0.5;         // The maximum redshift to consider (You must have power spectra that are within this range or GSL spline will error out)
 static double Om = 0.3089;        // The matter density at z=0
 static double c = 299792.458;     // The speed of light in km/s
 static double gammaval = 0.55;    // The value of gammaval to use in the forecasts (where f(z) = Om(z)^gammaval)
 static double r_g = 1.0;          // The cross correlation coefficient between the velocity and density fields
-static double beta0 = 0.437;      // The value of beta (at z=0, we'll modify this by the redshift dependent value of f as required)
+static double beta0 = 0.437;      // The value of beta (at z=0, we'll modify this by the redshift dependent value of bias and f as required)
 static double sigma80 = 0.8150;   // The value of sigma8 at z=0
 static double sigma_u = 13.00;    // The value of the velocity damping parameter in Mpc/h. I use the values from Jun Koda's paper
 static double sigma_g = 4.24;     // The value of the density damping parameter in Mpc/h. I use the values from Jun Koda's paper
 static double kmax = 0.2;         // The maximum k to evaluate for dd, dv and vv correlations (Typical values are 0.1 - 0.2, on smaller scales the models are likely to break down).
-static double survey_area[3] = {0.0, 0.0, 1.745};   // We need to know the survey area for each survey and the overlap area between the surveys (redshift survey only first, then PV survey only, then overlap. For fully overlapping we would have {0, 0, size_overlap}. For redshift larger than PV, we would have {size_red-size_overlap, 0, size_overlap})
+static double survey_area[3] = {0.0, 0.0, 1.745};   // We need to know the survey area for each survey and the overlap area between the surveys (redshift survey only first, then PV survey only, then overlap. 
+                                                    // For fully overlapping we would have {0, 0, size_overlap}. For redshift larger than PV, we would have {size_red-size_overlap, 0, size_overlap}). Units are pi steradians, such that full sky is 4.0, half sky is 2.0 etc.
 static double error_rand = 300.0;    // The observational error due to random non-linear velocities (I normally use 300km/s as in Jun Koda's paper)
-static double error_dist = 0.05;     // The percentage error on the distance indicator (Typically 0.05 - 0.10 for Sne IA, 0.2 or more for Tully-Fisher or Fundamental Plane) 
+static double error_dist = 0.05;     // The percentage error on the distance indicator (Typically 0.05 - 0.10 for SNe IA, 0.2 or more for Tully-Fisher or Fundamental Plane) 
 static double verbosity = 0;         // How much output to give: 0 = only percentage errors on fsigma8, 1 = other useful info and nuisance parameters, 2 = full fisher and covariance matrices
 
 // The number of redshifts and the redshifts themselves of the input matter and velocity divergence power spectra. 
