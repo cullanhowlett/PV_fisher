@@ -12,8 +12,11 @@ To compile the code you'll need a C compiler (I've only used gcc, but it's a pre
 A set of example files you can use to test the code are given in the /example_files/ directory.
     
 This code has been used by me for the papers:
+
 Howlett, Staveley-Smith and Blake, 2017 (http://adsabs.harvard.edu/abs/2017MNRAS.464.2517H)
+
 Da Cunha et. al., 2017 (http://adsabs.harvard.edu/abs/2017arXiv170601246D)
+
 Howlett et. al., in preparation.
 
 The maths is presented mainly in the first of these and if you use the code could you please cite that paper. However, the code given here is not the same as used for the first two (I added the redshift dependence later) and so you won't be able to fully reproduce those results (although they should be reasonably close). However, if you use the files given in the /example_files/ directory and the default parameters in the code, you should have no problem reproducing the last column in Table 1 of the third paper.
