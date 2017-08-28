@@ -49,11 +49,11 @@ static int Data[4] = {0,1,3,4};   // A vector of flags for the parameters we are
 static int nziter = 10;           // Now many bins in redshift between zmin and zmax we are considering
 static double zmin = 0.0;         // The minimum redshift to consider (You must have power spectra that are within this range or GSL spline will error out)
 static double zmax = 0.5;         // The maximum redshift to consider (You must have power spectra that are within this range or GSL spline will error out)
-static double Om = 0.3089;        // The matter density at z=0
+static double Om = 0.3121;        // The matter density at z=0
 static double c = 299792.458;     // The speed of light in km/s
 static double gammaval = 0.55;    // The value of gammaval to use in the forecasts (where f(z) = Om(z)^gammaval)
 static double r_g = 1.0;          // The cross correlation coefficient between the velocity and density fields
-static double beta0 = 0.437;      // The value of beta (at z=0, we'll modify this by the redshift dependent value of bias and f as required)
+static double beta0 = 0.393;      // The value of beta (at z=0, we'll modify this by the redshift dependent value of bias and f as required)
 static double sigma80 = 0.8150;   // The value of sigma8 at z=0
 static double sigma_u = 13.00;    // The value of the velocity damping parameter in Mpc/h. I use the values from Jun Koda's paper
 static double sigma_g = 4.24;     // The value of the density damping parameter in Mpc/h. I use the values from Jun Koda's paper
@@ -72,6 +72,8 @@ char * Pvel_file = "./example_files/example_pk";                                
 
 // The files containing the number density of the surveys. First is the PV survey, then the redshift survey. These files MUST have the same binning and redshift range, 
 // so that the sum over redshift bins works (would be fine if we used splines), i.e., if one survey is shallower then that file must contain rows with n(z)=0.
+// I also typically save nbar x 10^6 in the input file to make sure I don't lose precision when outputting small nbar values to files. This is corrected when the nbar file
+// is read in, so see the read_nz() routine!
 char * nbar_file[300] = {"./example_files/example_nbar_vel.dat",
                          "./example_files/example_nbar_red.dat"};      
 
@@ -781,6 +783,8 @@ double mu_integrand(double mu, void * pin) {
 // From this we create arrays to store the bin centre, the bin width, the comoving distance and growth factor at the bin centre and the number density.
 // The last bin width and bin centre is constructed from the last row of the input and the value of zmax at the top of the code. 
 // ITS VERY IMPORTANT THAT THE NUMBER OF ROWS AND THE REDSHIFTS OF BOTH THE DENSITY AND PV NUMBER DENSITIES MATCH AS THE INTEGRATION OVER Z IS DONE USING THE TRAPEZIUM RULE.
+// ALSO MAKE NOTE OF THE FACTOR OF 1.0e-6 ON LINE 827. THIS IS BECAUSE I TYPICALLY SAVE THE VALUE OF NBAR x 10^6 IN THE INPUT FILES< SO THAT I DON'T LOSE PRECISION
+// WHEN SMALL VALUES OF THE NUMBER DENSITY ARE WRITTEN TO A FILE!
 void read_nz() {
 
     FILE * fp;
