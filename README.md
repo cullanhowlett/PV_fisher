@@ -11,9 +11,9 @@ To compile the code you'll need a C compiler (I've only used gcc, but it's a pre
     
 A set of example files you can use to test the code are given in the /example_files/ directory.
     
-This code has been used by me for the papers: Howlett, Staveley-Smith and Blake, 2017 (http://adsabs.harvard.edu/abs/2017MNRAS.464.2517H); Da Cunha et. al., 2017 (http://adsabs.harvard.edu/abs/2017arXiv170601246D); Howlett et. al 2017 (.
+This code has been used by me for the papers: Howlett, Staveley-Smith and Blake, 2017 (http://adsabs.harvard.edu/abs/2017MNRAS.464.2517H); Da Cunha et. al., 2017 (http://adsabs.harvard.edu/abs/2017arXiv170601246D); Howlett et. al 2017 (http://adsabs.harvard.edu/abs/2017ApJ...847..128H).
 
-The maths is presented mainly in the first of these and if you use the code could you please cite that paper. However, the code given here is not the same as used for the first two (I added the redshift dependence later) and so you won't be able to fully reproduce those results (although they should be reasonably close). However, if you use the files given in the /example_files/ directory and the default parameters in the code, you should have no problem reproducing the last column in Table 1 of the third paper.
+The maths is presented mainly in the first of these. However, the code given here is not the same as used for the first two (I added the redshift dependence later) and so you won't be able to fully reproduce those results (although they should be reasonably close). However, if you use the files given in the /example_files/ directory and the default parameters in the code, you should have no problem reproducing the last column in Table 1 of the third paper.
 
 Finally, if you read the first paper you'll notice that there are a bunch of things in there that are absent in PV_fisher.c: namely, the ability to handle two distinct redshift and two PV surveys with different parameters (so four datasets in total) and forecasts on primordial non-Gaussianity, scale-dependent galaxy and velocity bias, and zero-point offsets. In have included primordial non-Gaussianity, scale-dependence and zero-points, and a calculation of the systematic bias associated with them, in PV_fisher_extended.c. It makes the code quite a bit more confusing, so it's recommended you only use this if you know what you want to do, or contact me first.
 
